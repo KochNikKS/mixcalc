@@ -1,15 +1,11 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "./pcrmix_vercel.py",
-      "use": "@vercel/python"
+  "functions": {
+    "api": {
+      "runtime": "python3.10",
+      "includeFiles": ["pcrmix_vercel.py", "requirements.txt"],
+      "environment": {
+        "FLASK_ENV": "production"
+      }
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ]
+  }
 }
