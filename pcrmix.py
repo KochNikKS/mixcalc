@@ -16,8 +16,8 @@ from typing import Any
 
 from flask import Flask, render_template, request, session, jsonify
 from numpy import isnan, nan
-from pandas import DataFrame, Series, __version__ as pdvers
-from pandas import set_option as pd_setopt
+from pandas import DataFrame, Series, __version__ as pdvers, set_option as pd_setopt
+# from pandas import 
 from json import dumps as jdumps
 
 from common_utils import DotDict, safesplit, dkey_search, newer_than
@@ -656,7 +656,6 @@ if __name__ == "__main__":
     certificate_path = 'certificate.pem'
 
     # Запуск Flask с использованием SSL
-    # app.run(ssl_context=(certificate_path, private_key_path))
     web_pcr.run('0.0.0.0', port, debug=_debug, ssl_context=(certificate_path, private_key_path))
   else:
     mix_object, reag_table = mix_prep(parameters, table_src='local')
