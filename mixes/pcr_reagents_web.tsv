@@ -1,0 +1,9 @@
+#reagents	Cstock	Cwork	Units
+TaqPol buf	10	1	x
+MgCl2	100	2.5	mM
+dNTPs	10	0.4	mM
+DMSO	100	0	%
+f:forward	10	0.2	uM
+r:reverse	10	0.2	uM
+SYBR	100	1	%
+TaqPol	5	0.04	u/ul

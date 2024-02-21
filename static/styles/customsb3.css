@@ -1,0 +1,112 @@
+
+/* !!! width for .cSelect and ul.list should be set as "style='' " in the HTML file to make them fit to your needs, as well as ul.list max-height 
+	  use different name for different comboboxes and differnt id patterns
+*/
+
+.cSelect { 
+	--totalWidth: 7ch;
+	--lineHeight: 24px;
+	--number_of_lines_in_list: 2;
+	--listFS: 12px;
+	--listHeight: calc(var(--lineHeight) * var(--number_of_lines_in_list) + 5px);
+	position: relative;
+	/* width: var(--totalWidth); */
+	user-select: none;
+}
+
+.cSelectHeader {
+	--defFS: 12px;
+	--defFF: consolas;
+	--defHeight: 24px;
+	--defFC: gray;
+	--defBG: white;
+	--bRad: 7px;
+	cursor:   arrow;
+	border-radius: var(--bRad);
+	box-shadow: 0px 0px 3px 0px;
+	list-style: none;
+	user-select: none;
+	height: var(--defHeight);
+	color: var(--defFC);
+	background-color: var(--defBG);
+    display: flex;
+	align-items: center;
+	z-index: 2;
+}
+
+.cSelectHeader:after {
+	z-index: 999;
+	position: absolute;
+	right: 2%;
+	top: 4px;
+	content: '';
+	width: 15px;
+	height: 15px;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAIDSURBVDhPY2QgAnx8/Uju+x+Wld9+/9/OyMLWqygl+hUkTlDz+5cPDd9//rHl9dsPUt9//GD48fPXhhcv3wUmxIbj1/z2xUOPtx+/rXr95h3vu3fvGJ4+frz87du3ydW1td9B8jg1v372IOXNh6/T37x9x/L61av/Tx4/rv/27VtLRVXVf6gSTM2vnt9m/P+XpfnV+8/Vb9++Y3jx4sW3Z0+eJBSVlKyGKoEDFM1f3jxk+/z979wXbz7GgJz57OnTp8+ePQ0or6g8A1WCAuCaP726L/DtN+O61+8+O754/pzh0aNHZ1+8eO5fXVP7FKoEA4A1nzlxWIaDk2vHtx9/tP/8/cvw+8+/XwKikvb6msonwKpwACYQceLk6bfnzl/c/PDB/d+fPn5kYGNjYWNh+HPo7qNnHXeevuUCq8QCUPzc191hICgkPFtMXNKEl4+PgYeHl4GHX+AuCztXlpKM+C6oMjjACO3+nk5mdnaOAmER0SYg5uLm4WHg5eNn4ODmW8LExlmsJCX8CqoUUzMMAF2hxC8gNENUTMyVX0CQgZubm4Gdi+ft8zefrN3szG6C1ID9jA0UlVbc+/n9m/ujB/cTnj5+BExYbxhePH0i/On9G22oEtyaQSArr+B/Tn7hwhfPnmg9uHd3xaePH4Aa/kpBpUkDM6ZN8Vm2bHkGhMfAAABMd+bUrFulCQAAAABJRU5ErkJggg==');
+	background-color: white;
+	transition: transform ease-in-out 100ms;
+}
+
+details[open] .cSelectHeader:after {	
+	transform-origin: center;
+	transition: transform ease-in-out 100ms;
+	transform: rotate(-80deg) translate(0%, 0%);
+}
+
+ul.list {
+	/* width: var(--totalWidth); */
+	background: white;
+	position: absolute;
+	top: calc(100% + .2rem);
+	margin: 0;
+	box-sizing: border-box;
+	border-radius: 5px;
+	/* max-height: var(--listHeight); */
+	overflow-y: auto;
+	overflow-x: none;
+	box-shadow: 0px 0px 3px 0px gray;
+	font-family: consolas;
+	padding-left: 0;
+	z-index: 999;
+}
+
+li.menu_line {border-bottom: 1px dotted #ccc;	height: var(--lineHeight); align-self: flex-start;   display: flex;  align-items: center; padding-left: 5px; padding-right: 5px;}
+li.menu_line:hover {box-shadow: inset 0px 0px 15px 0px #edf2fa}
+li.menu_line:last-child {border-bottom: none;}
+
+/* FAKE SELECT */
+
+.opt {
+	appearance: none;
+	display: none;
+	z-index: 1;
+	pointer-events: none;
+	font-size: var(--defFS);
+	font-family: var(--defFF);
+}
+
+.opt:checked {
+	display: inline;
+
+} 
+
+input.opt:after {
+	content: attr(title);
+	/* display: inline;	 */
+
+}
+
+.listItem {
+	align-self: flex-start;
+	width: 100%;
+	cursor: pointer;
+	height: 100%;
+	line-height: var(--lineHeight);
+	font-size: var(--listFS);
+	text-align: right;
+}
+
+
+.renderScreen{
+	
+}

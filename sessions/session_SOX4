@@ -1,0 +1,7 @@
+#reagents	Cstock	Cwork	Units
+TaqPol buf	10.0	1.0	 x
+dNTPs	10.0	0.4	 mM
+ u6prom-f	10.0	0.2	 uM
+sg9r	10.0	0.2	 uM
+TaqPol	5.0	0.04	 u/ul
+[{"mix_volume": 25.0, "n_samples": 10.0, "dna_volume": 5.0, "hidelist": []}]

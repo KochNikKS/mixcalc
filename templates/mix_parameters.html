@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    href="{{ url_for('static', filename='styles/pcrmix.css')}}"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="{{ url_for('static', filename='styles/toggleBox_med.css')}}"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="{{ url_for('static', filename='styles/ulInput.css')}}"
+    rel="stylesheet"
+    type="text/css"
+  />
+
+  <link
+    href="{{ url_for('static', filename='styles/customsb3.css')}}"
+    rel="stylesheet"
+    type="text/css"
+  />
+
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <script src="{{ url_for('static', filename='html2canvas/html2canvas.min.js') }}"></script>
+  
+  <title>{{tableName}}</title> 
+</head>
+
+
+<form action="web_pcr">
+
+  <div class="active-field" id="af1">
+    <div class="control-panel" id="cp1">
+      <div class="oneLiner height_center" id="cp_element1">
+        <button type="button" title="Save table to file" class="round_but_save" onclick="saveRecipeData()">🖫</button>
+        <button type="button" title="Reload table from file" class="round_but_reload" onclick="checkTableName()">&#8635;</button>
+      </div>
+      <details class="cSelect" id="cSelect1" style='width: 20ch' onkeydown="if (event.key === 'Escape'){this.removeAttribute('open')}">
+        <summary class="cSelectHeader" id="sel1">
+          <input class=opt type="radio" name="file_item" id="file_item1" title="Choose table" checked>
+          {%for num, file_name in enumerate(tables) %}
+          <input class=opt type="radio" name="file_item" id="file_item{{num+2}}" title="{{file_name}}">
+          {% endfor %}
+        </summary>
+        <ul class="list" style="width: 20ch; max-height: calc(10 * 24px + 5px);" 
+            onclick="a=document.querySelector('#cSelect1'); if (a){a.removeAttribute('open')}">
+          <li class="menu_line">
+            <label for="file_item1" class="listItem">Chose table</label>
+          </li>
+          {% for num, file_name in enumerate(tables) %}
+          <li class="menu_line">
+            <label for="file_item{{num+2}}" class="listItem">{{file_name}}</label>
+          </li>
+          {% endfor %}
+        </ul>
+      </details>
+ 
+      <div class="ulInput_container" id="cp_element4">
+        <input
+          type="number"
+          size="7"
+          min="0"
+          max="999"
+          required
+          class="ulInput"
+          id="n_samples"
+          onkeyup="if(this.value > 999) this.value = 999; if(this.value < 0) this.value = 0"
+          onkeydown="event.keyCode===13 && this.blur();"
+          placeholder="Num. of samples"
+          value = {{sample_number}}
+          title = "Number of samples"
+        />
+
+        <label class="ulLabel">N<sub>samples</sub></label>
+      </div>
+      &nbsp;&nbsp;
+      <div class="ulInput_container" id="cp_element5">
+        <input
+          type="text"
+          size="7"
+          min="0"
+          max="999"
+          class="ulInput"
+          id="v_dna"
+          required
+          onkeyup="if(this.value > 999) this.value = 999; if(this.value < 0) this.value = 0"
+          onkeydown="event.keyCode===13 && this.blur();"
+          placeholder="VDNA"
+          value = {{dna_volume}}
+          title = "DNA sample volume"
+        />
+        <label class="ulLabel">V<sub>DNA</sub> </label>
+      </div>    
+      &nbsp;&nbsp;
+      <div class="ulInput_container" id="cp_element6">
+        <input
+          type="number"
+          size="7"
+          min="0"
+          max="999"
+          required
+          class="ulInput"
+          id="v_mix"
+          onkeyup="if(this.value > 999) this.value = 999; if(this.value < 0) this.value = 0"
+          onkeydown="event.keyCode===13 && this.blur();"
+          placeholder="Vmix"
+          value = {{reaction_volume}}
+          title = "Mixture volume"
+        />
+        <label class="ulLabel">V<sub>mix</sub> </label>
+      </div>
+
+      <details class="cSelect" id=cSelect2 style="width: 7ch;" onkeydown="if (event.key === 'Escape'){this.removeAttribute('open')}">
+        <summary class="cSelectHeader">
+          <!-- uncomment if you need invitation -->
+          <!-- 		<input class=opt type="radio" name="item" id="default" title="uL" checked> -->
+          <input class=opt type="radio" name="item" id="item1" title="ul" checked />
+          <input class=opt type="radio" name="item" id="item2" title="ml" />
+        </summary>
+        <ul class="list" style="max-height: calc(24 * 2 + 5px); width: 7ch" 
+            onclick="a=document.querySelector('#cSelect2'); if (a){a.removeAttribute('open')}">
+          <li class="menu_line">
+            <label for="item1" class="listItem">ul</label>
+          </li>
+          <li class="menu_line">
+            <label for="item2" class="listItem">ml</label>
+          </li>
+        </ul>
+      </details>
+    </div> <!-- control panel-->
+
+    <div class="table-div" id="td1">    
+      <table class="main_form_table" cellspacing="0" id="conc_table">
+      <thead>      
+      
+      <tr class="header_row">
+        <th class="table_header"></th>
+        <th class="table_header">Reagent</th>
+        <th class="table_header">C<sub>stock</sub></th>
+        <th class="table_header">C<sub>work</sub></th>
+        <th class="table_header"></th>
+      </tr>
+       
+      </thead>
+  
+      <tbody>
+
+      {% for num, reag in enumerate(reagent_names) %}
+      {% set mod_reag = reag[2:] if reag.startswith('f:') or reag.startswith('r:') else reag  %}
+
+      <tr class="reagent_row">
+        <td class="check_cell">
+          <div class="ctoggleBut" title="Hide/show this component&#10;(without excluding from the mixture calculation)">
+
+            <input type="checkbox" class="toggleBox" id="hide_{{mod_reag}}" {{ 'checked' if reag not in hide_list else "" }} >
+            <span class="toggleHandle"></span>
+            <span class="toggleBG"></span>
+            <label class="toggleLabel tl1">show</label>
+            <label class="toggleLabel tl2">hide</label>
+          </div>
+        </td>
+  
+        <td class="table_cell" id="name_cell_{{mod_reag}}">
+          <div class="names-div" id="d_{{mod_reag}}">
+            <input 
+              type = 'text'
+              size = 10
+              required
+              class="uInput editName"
+              id = "rName_{{mod_reag}}_uInput"
+              value = "{{mod_reag}}"              
+              onkeydown="event.keyCode===13 && this.blur();"  
+              title = 'click to change {{mod_reag}}'
+            />
+          </div>
+        </td>
+  
+        <td class="table_cell" id="Cstock_{{mod_reag}}_cell" title="Click to edit">
+          <input
+            type="number"
+            size="4"
+            min="0"
+            max="999"
+            step="0.0001"
+            required
+            class="editC uInput"
+            id="Cstock_{{mod_reag}}_uInput"
+            onkeyup="if(this.value > 1000) this.value = 1000; if(this.value < 0) this.value = 0"
+            value="{{reagent_table[reag][0]}}"
+            onkeydown="event.keyCode===13 && this.blur();"
+          />
+          <div class="units-div">{{reagent_table[reag][-1]}}</div>
+        </td>
+  
+        <td class="table_cell" id="Cwork_{{mod_reag}}_cell" title="Click to edit">
+          <input
+            type="number"
+            size="4"
+            min="0"
+            max="999"
+            step="0.0001"
+            required
+            class="editC uInput"
+            id="Cworck_{{mod_reag}}_uInput"
+            onkeyup="if(this.value > 1000) this.value = 1000; if(this.value < 0) this.value = 0"
+            value="{{reagent_table[reag][1]}}"
+            onkeydown="event.keyCode===13 && this.blur();"
+          />
+          <div class="units-div">{{reagent_table[reag][-1]}}</div>
+        </td>
+  
+        <td class="action_cell">
+          <button
+            type="button"
+            onclick="tdErase(this)"
+            class="round_but_del"
+            title="Exclude {{mod_reag}} from mix"
+          >&#10005;</button><button
+                             type="button"
+                             onclick="tdLift(this)"
+                             class="round_but_moveup"
+                             title="Move {{mod_reag}} up in mix">▲</button>
+        </td>
+      </tr>
+      {% endfor %}
+  
+      <tr class="reagent_row add_reagent_row" id="add_row">
+        <!-- <td class="check_cell_flat"><span class="small_caption">&nbsp;Add:&nbsp;</span></td> -->
+        <td class="add_cell" style="padding-right: 5px">
+          <p style="font-size: 12px; color: gray; text-align: right">
+            Add <br />to mix:
+          </p>
+        </td>
+        <td class="add_cell" id="new_reagent_cell">
+          <div class="oneLiner height_bottom">
+            <div class="ulInput_container" title="Name of the reagent to add">
+              <input
+                autocomplete="on"
+                list="reag_ac"
+                class="ulInput"
+                type="text"
+                placeholder="reagent_name"
+                maxlength="20"
+                onkeydown="event.keyCode===13 && this.blur();"
+                id="addName"
+              />
+
+                <datalist id="reag_ac" class="auto_complete">
+                  {% for option in autocomplete_rnames %}
+                      <option value="{{ option }}" class="ac_opt">
+                  {% endfor %}
+                </datalist>
+
+              <label class="ulLabel">reagent</label>
+            </div>
+            &nbsp;
+            <div class="ulInput_container" title="Units">
+              <input
+                class="ulInput"
+                type="text"
+                placeholder="units"
+                maxlength="7"
+                onkeydown="event.keyCode===13 && this.blur();"
+                id="addUU"
+                onblur="setUnits(this)"
+              />
+              <label class="ulLabel">units</label>
+            </div>
+          </div>
+        </td>
+  
+        <td class="add_cell" id="new_stock_cell">
+          <div class="oneLiner height_bottom">
+            <div class="ulInput_container" title="Stock concentration to use">
+              <input
+                type="number"
+                min="0"
+                max="999"
+                class="ulInput"
+                id="addStockC"
+                onkeyup="if(this.value > 1000) this.value = 1000; if(this.value < 0) this.value = 0"
+                onkeydown="event.keyCode===13 && this.blur();"
+                placeholder="Cstock"
+              />
+              <label class="ulLabel">C<sub>stock</sub></label>
+            </div>
+            <label class="add_units_span"></label>
+          </div>
+        </td>
+  
+        <td class="add_cell" id="new_work_cell">
+          <div class="oneLiner height_bottom">
+            <div class="ulInput_container">
+              <input
+                type="number"
+                min="0"
+                max="999"
+                class="ulInput"
+                id="addWorkC"
+                onkeyup="if(this.value > 1000) this.value = 1000; if(this.value < 0) this.value = 0"
+                onkeydown="event.keyCode===13 && this.blur();"
+                title="Work concentration to use"
+                placeholder="Cwork"
+              />
+              <label class="ulLabel">C<sub>work</sub></label>
+            </div>
+            <label class="add_units_span"></label>
+          </div>
+        </td>
+  
+        <td class="action_cell addbut_cell" align="left" id="tcAddNew">
+          <button
+            type="button"
+            class="round_but_add"
+            title="Add reagent into mix"
+            onclick="addNameToMix()"
+          >
+            &#10011;
+          </button>
+        </td>
+      </tr>
+  
+
+    </tbody>
+    </table>
+    <div class="statusBar" id="sb1"><span id='tableUsed'> Table used: {{tableName}}</span><span id="session_">MIX ID: <span id='mixID'></span></span></div>
+  </div>
+  </div>
+
+
+  <div class="draggable" id="handleDiv1" title="Drag it">
+    <div class="renderScreen" id="rs1" title="Mix composition"></div>
+    <div class="floatDiv upper"><div class="imgDiv rotated" id="refresh1" onclick="renderMix()" title="Update"></div></div>
+    <div class="floatDiv lower"><div class="imgDiv static" id="copy1" onclick="altCopy()" title="Copy"></div></div>
+  </div>
+
+</form>
+
+
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='pcrmix_fe.js') }}">
+</script>
+</html>

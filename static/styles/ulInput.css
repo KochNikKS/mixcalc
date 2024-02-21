@@ -1,0 +1,152 @@
+/* IN HTML USE:
+
+<div class="ulInput_container" id="cp_element4">
+<input
+  list="YOUR-ID" -  optional!
+  type="number"
+  size="7"
+  min="0"
+  max="999"
+  required
+  class="ulInput"
+  id="n_samples"
+  onkeyup="if(this.value > 999) this.value = 999; if(this.value < 0) this.value = 0"
+  onkeydown="event.keyCode===13 && this.blur();"
+  placeholder="Num. of samples"
+  value = 10
+/>
+
+OPTIONAL ----------------------------------------------------------------
+    <datalist id="YOUR-ID">
+        {% for option in options %}
+            <option value="{{ option }}">
+        {% endfor %}
+    </datalist>
+
+-------------------------------------------------------------------------
+
+<label class="ulLabel">N<sub>samples</sub></label>
+</div> */
+
+
+
+
+
+
+/* ------------------ options --------------------------------
+"totalHeight" should be set in accordance with the "rootFontSize" 
+(e.g. the total height of 45 px fit good with the 16px-height font, 
+60px - with 24 px height font, etc.) */
+
+.ulInput_container {
+  --totalHeight: 40px;
+  --rootFontSize: 15px;
+  --inputFont: 'lucida console';
+  --inputFColor: rgb(5, 51, 104);
+  --inputFWeight: bold;
+  
+  --labelFont: 'calibri';
+  --labelColor: rgb(73, 61, 61);
+  --labelUpColor: #4a4af7;
+  
+  --topRowHeight: 24%;
+  --rowHeight: 38%;
+  }
+  /*  ----------------------------------------------------------- */
+  .ulInput_container {
+    height: var(--totalHeight);
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: var(--topRowHeight) var(--rowHeight) var(--rowHeight);
+    font-size: var(--rootFontSize);
+  }
+
+/* td {vertical-align: bottom; padding-bottom: 2px; text-align: left;} */
+
+
+
+  .ulInput { 
+    grid-row: 2 / 4; 
+    grid-column: 1 / 2; 
+    color: var(--inputFColor); 
+    font-family: var(--inputFont); 
+    /* font-weight: var(--inputFWeight); */
+    font-size: 1em;
+    user-select: none;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid rgb(73, 61, 61);
+    transition: border-width 0.2s ease-in-out;
+    border-radius: 5px 5px 0 0;
+    &::placeholder {color: transparent;};
+    
+    &:placeholder-shown ~ .ulLabel {
+      grid-row: 2 / 4; 
+      margin-left: 3px; 
+      font-size: 0.9em; 
+      font-weight: 400; 
+      color: var(--labelColor)};
+  }
+  
+  .ulLabel {
+    pointer-events: none;
+    grid-row: 1; 
+    grid-column: 1 / 2; 
+    background: transparent; 
+    z-index: 999; 
+    user-select: none; 
+    font-family: var(--labelFont);
+    color: var(--labelColor);
+    margin-left: 3px;
+    font-size: 0.8em; 
+    font-weight: 900;
+    }
+  
+  .ulInput:focus {
+  /*   // uncomment if :hover behaviour inactivated! */
+    border-bottom: 3px solid blue;
+    border-bottom-width: 3px;
+    border-image: linear-gradient(to right,blue,white);
+    border-image-slice: 1;
+  /*   // transition: border 0.2s, border-width 0.1s; */
+    
+    ~ .ulLabel { 
+      grid-row: 1; 
+      color: var(--labelUpColor); 
+      transition: color 0.3s, grid-row 0.2s ease; 
+      margin-left: 3px; 
+      font-size: 0.7em;
+      font-weight: bold;    
+      }; 
+  }
+  
+  .ulInput:hover {
+    border-bottom: 3px solid blue;
+    border-image: linear-gradient(to right,darkblue, blue, lightblue, white);
+    border-image-slice: 1;
+      ~ .ulLabel {color: var(--labelUpColor); transition: color 0.5s};  
+  transition: border 0.2s, border-width 0.1s;
+  } 
+
+
+.add_units_span {
+  display: inline-block;
+}
+
+.ulInput::-webkit-outer-spin-button,
+.ulInput::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+/* Firefox */
+.ulInput[type=number] {
+-moz-appearance: textfield;
+}
+
+
+input.ulInput::-webkit-calendar-picker-indicator {
+  visibility: collapse;
+}
+
+  

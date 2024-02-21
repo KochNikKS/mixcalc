@@ -1,0 +1,102 @@
+.ctoggleBut {
+    --mainFontSize: 12px;
+    --font: consolas;
+    --offFC: gray;
+    --onFC: rgb(8, 103, 245);
+    --offBG: white;
+    --onBG: white;
+    --onHS: var(--onFC);
+    --width: 46px;
+    --height: 19px;
+    --br: calc(var(--width)/3);
+    --columns: var(--height) calc(var(--width) - var(--height)*2) var(--height);
+    user-select: none;
+    width: var(--width);
+    height: var(--height);
+    background: var(--offBG);
+    display: grid;
+    grid-template-columns: var(--columns);
+    grid-template-rows: var(--height);
+    border-radius: var(--br);
+    box-shadow: 0px 0px 3px 0px black;
+    font-size: var(--mainFontSize);
+    cursor: pointer;
+  }
+  
+  .toggleBG {
+    grid-row: 1 / 2;
+    grid-column: 1 / 4;
+    border-radius: var(--br);
+    background: var(--offBG);
+    z-index: 1;
+    border: none;
+    transition: background 0.5s ease;
+  }
+  
+  .toggleBox {
+    grid-row: 1 / 4;
+    grid-column: 1 / 4;
+    opacity: 0;
+    z-index: 10;
+    cursor: pointer;
+  }
+  
+  .tl2 {
+    z-index: 2;
+    background: transparent;
+    font-size: 0.8em;
+    color: var(--offFC);
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin-left: 3px;
+    font-family: var(--font);
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 1s ease;
+  }
+  
+  .tl1 {
+    z-index: 2;
+    background: transparent;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: var(--offFC);
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    margin-left: 2px; 
+    font-family: var(--font);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+  
+  /* .toggleBox {background: white; width: 100px;} */
+  .toggleHandle {
+    z-index: 4;
+    display: inline-block;
+    grid-row: 1 / 2;
+    grid-column: 1;
+    border-radius: 50%;
+    box-shadow: 0px 0px 2px 1px gray;
+    background-image: linear-gradient(to top, silver, white);
+  }
+  
+  .toggleBox:checked {~ .toggleBG {
+    background: var(--onBG); transition: background 0.5s ease;
+  }
+    ~ .toggleHandle {grid-column: 3; box-shadow: 0px 0px 2px 1px var(--onHS);}
+    ~ .tl1 {opacity: 1; color: var(--onFC); transition: opacity 1s;}
+    ~ .tl2 {opacity: 0; transition: opacity 0.1s ease;}
+  }
+  
+  .toggleBox:hover {~ .toggleHandle {
+    background-image: linear-gradient(to bottom, silver, white);
+    box-shadow: 0px 0px 5px 1px var(--onHS);
+    }}
+
+.some{
+
+    background-color: #125398;
+}

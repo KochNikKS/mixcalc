@@ -1,0 +1,7 @@
+#reagents	Cstock	Cwork	Units
+PCRbuf	10	1	x
+dNTPs	10	0.4	mM
+f:forward	10	0.2	uM
+r:reverse	10	0.2	uM
+SYBR	100	1	x
+TaqPol	5	0.04	u/ul
