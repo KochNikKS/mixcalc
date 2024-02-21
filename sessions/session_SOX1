@@ -1,5 +1,0 @@
-#reagents	Cstock	Cwork	Units
-asdfl	10.0	1.0	 x
-jlksdfa	100.0	2.5	 mM
-	5.0	0.04	 u/ul
-[{"mix_volume": 25.0, "n_samples": 10.0, "dna_volume": 5.0, "hidelist": []}]
